@@ -1,0 +1,9 @@
+# Dependencies
+server/node_modules/
+web-app/node_modules/
+
+# Build outputs
+web-app/.next/
+web-app/out/
+web-app/dist/
+web-app/build/
