@@ -158,13 +158,13 @@ export default function HomePage() {
                     {project.deployedPort && (
                       <div className="px-5 pb-3">
                         <a
-                          href={`http://localhost:${project.deployedPort}`}
+                          href={`http://${typeof window !== "undefined" ? window.location.hostname : "localhost"}:${project.deployedPort}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
                           className="inline-flex items-center gap-1 text-xs text-green-600 hover:text-green-800 underline underline-offset-2"
                         >
-                          localhost:{project.deployedPort}
+                          {typeof window !== "undefined" ? window.location.hostname : "localhost"}:{project.deployedPort}
                           <ExternalLink className="w-3 h-3" />
                         </a>
                       </div>

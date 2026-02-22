@@ -469,12 +469,12 @@ export default function AdminPage() {
                       )}
                       <div className="text-xs text-gray-500 mt-0.5 flex items-center gap-3">
                         <a
-                          href={`http://localhost:${dep.port}`}
+                          href={`http://${window.location.hostname}:${dep.port}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-blue-400 hover:underline"
                         >
-                          localhost:{dep.port}
+                          {window.location.hostname}:{dep.port}
                         </a>
                         <span>Deployed {new Date(dep.lastDeployedAt).toLocaleString()}</span>
                       </div>

@@ -35,7 +35,8 @@ export default function Toolbar() {
       const data = await res.json();
       if (data.success && data.port) {
         setDeployedPort(data.port);
-        setDeployedUrl(`http://localhost:${data.port}`);
+        const host = window.location.hostname;
+        setDeployedUrl(`http://${host}:${data.port}`);
       } else {
         alert(data.error || "Deployment failed. Check console for details.");
         console.error("Deploy response:", data);
