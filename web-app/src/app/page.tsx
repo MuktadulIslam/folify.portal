@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Settings, Loader2, ExternalLink, Trash2, Settings2, FolderOpen } from "lucide-react";
+import { Plus, Settings, Loader2, ExternalLink, Trash2, Settings2, FolderOpen, X } from "lucide-react";
 import { routePaths } from "@/config";
 
 interface ProjectSummary {
@@ -19,6 +19,13 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [newDescription, setNewDescription] = useState("");
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const [deleteTarget, setDeleteTarget] = useState<ProjectSummary | null>(null);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
+  const deleteInputRef = useRef<HTMLInputElement>(null);
 
   async function fetchProjects() {
     const res = await fetch("/api/projects");
@@ -30,13 +37,26 @@ export default function HomePage() {
     fetchProjects().finally(() => setLoading(false));
   }, []);
 
+  function openModal() {
+    setNewName("");
+    setNewDescription("");
+    setShowModal(true);
+    setTimeout(() => nameInputRef.current?.focus(), 50);
+  }
+
+  function closeModal() {
+    if (creating) return;
+    setShowModal(false);
+  }
+
   async function handleNewProject() {
+    if (!newName.trim()) return;
     setCreating(true);
     try {
       const res = await fetch("/api/projects", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({}),
+        body: JSON.stringify({ name: newName.trim(), description: newDescription.trim() }),
       });
       const data = await res.json();
       if (data.project) {
@@ -47,12 +67,26 @@ export default function HomePage() {
     }
   }
 
-  async function handleDelete(projectId: string, projectName: string) {
-    if (!confirm(`Delete "${projectName}"? This cannot be undone.`)) return;
-    setDeletingId(projectId);
+  function openDeleteModal(project: ProjectSummary) {
+    setDeleteTarget(project);
+    setDeleteConfirmText("");
+    setTimeout(() => deleteInputRef.current?.focus(), 50);
+  }
+
+  function closeDeleteModal() {
+    if (deletingId) return;
+    setDeleteTarget(null);
+    setDeleteConfirmText("");
+  }
+
+  async function handleDelete() {
+    if (!deleteTarget) return;
+    setDeletingId(deleteTarget._id);
     try {
-      await fetch(`/api/projects/${projectId}`, { method: "DELETE" });
-      setProjects((prev) => prev.filter((p) => p._id !== projectId));
+      await fetch(`/api/projects/${deleteTarget._id}`, { method: "DELETE" });
+      setProjects((prev) => prev.filter((p) => p._id !== deleteTarget._id));
+      setDeleteTarget(null);
+      setDeleteConfirmText("");
     } finally {
       setDeletingId(null);
     }
@@ -82,16 +116,11 @@ export default function HomePage() {
             {/* New Project button */}
             <div className="flex justify-end mb-6">
               <button
-                onClick={handleNewProject}
-                disabled={creating}
-                className="flex items-center gap-2 px-4 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-green-300 transition-colors"
+                onClick={openModal}
+                className="flex items-center gap-2 px-4 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
               >
-                {creating ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <Plus className="w-4 h-4" />
-                )}
-                {creating ? "Creating..." : "New Project"}
+                <Plus className="w-4 h-4" />
+                New Project
               </button>
             </div>
 
@@ -153,7 +182,7 @@ export default function HomePage() {
                         <Settings2 className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => handleDelete(project._id, project.name)}
+                        onClick={() => openDeleteModal(project)}
                         disabled={deletingId === project._id}
                         className="p-1.5 text-green-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                         title="Delete project"
@@ -172,6 +201,123 @@ export default function HomePage() {
           </>
         )}
       </div>
+
+      {/* New Project Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-md mx-4 p-6">
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-sm font-semibold text-green-900">New Project</h2>
+              <button onClick={closeModal} className="p-1 text-green-400 hover:text-green-700 rounded-lg transition-colors">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <form
+              onSubmit={(e) => { e.preventDefault(); handleNewProject(); }}
+              className="flex flex-col gap-4"
+            >
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-medium text-green-800">Project Name <span className="text-red-500">*</span></label>
+                <input
+                  ref={nameInputRef}
+                  type="text"
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
+                  placeholder="My Project"
+                  disabled={creating}
+                  className="px-3 py-2 text-sm border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 disabled:bg-green-50"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-medium text-green-800">Description <span className="text-green-400">(optional)</span></label>
+                <textarea
+                  value={newDescription}
+                  onChange={(e) => setNewDescription(e.target.value)}
+                  placeholder="What is this project about?"
+                  rows={3}
+                  disabled={creating}
+                  className="px-3 py-2 text-sm border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 resize-none disabled:bg-green-50"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  disabled={creating}
+                  className="px-4 py-2 text-sm text-green-700 border border-green-200 rounded-lg hover:bg-green-50 disabled:opacity-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={creating || !newName.trim()}
+                  className="flex items-center gap-2 px-4 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-green-300 transition-colors"
+                >
+                  {creating && <Loader2 className="w-4 h-4 animate-spin" />}
+                  {creating ? "Creating..." : "Create & Build"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-md mx-4 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-sm font-semibold text-red-700">Delete Project</h2>
+              <button onClick={closeDeleteModal} className="p-1 text-green-400 hover:text-green-700 rounded-lg transition-colors">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <p className="text-sm text-green-700 mb-1">
+              This action <span className="font-semibold">cannot be undone</span>. Type{" "}
+              <span className="font-mono font-semibold text-red-600">Delete {deleteTarget.name}</span>{" "}
+              to confirm.
+            </p>
+
+            <form
+              onSubmit={(e) => { e.preventDefault(); handleDelete(); }}
+              className="flex flex-col gap-4 mt-4"
+            >
+              <input
+                ref={deleteInputRef}
+                type="text"
+                value={deleteConfirmText}
+                onChange={(e) => setDeleteConfirmText(e.target.value)}
+                placeholder={`Delete ${deleteTarget.name}`}
+                disabled={!!deletingId}
+                className="px-3 py-2 text-sm border border-red-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 disabled:bg-red-50"
+              />
+
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={closeDeleteModal}
+                  disabled={!!deletingId}
+                  className="px-4 py-2 text-sm text-green-700 border border-green-200 rounded-lg hover:bg-green-50 disabled:opacity-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={!!deletingId || deleteConfirmText !== `Delete ${deleteTarget.name}`}
+                  className="flex items-center gap-2 px-4 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:bg-red-300 transition-colors"
+                >
+                  {deletingId && <Loader2 className="w-4 h-4 animate-spin" />}
+                  {deletingId ? "Deleting..." : "Delete Project"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

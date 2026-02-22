@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useBuilderStore } from "@/stores/builder-store";
 import { Monitor, Tablet, Smartphone, Eye, Rocket, Loader2, CheckCircle, X, ExternalLink } from "lucide-react";
 
 export default function Toolbar() {
+  const router = useRouter();
   const { selectedDevice, setDevice, isDeploying, setIsDeploying, setDeployedPort, projectId } =
     useBuilderStore();
   const [deployedUrl, setDeployedUrl] = useState<string | null>(null);
@@ -70,7 +72,7 @@ export default function Toolbar() {
   return (
     <div className="border-b border-green-200 bg-white shrink-0">
       <div className="h-14 flex items-center justify-between px-4">
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-3">
           {devices.map(({ id, icon: Icon, label }) => (
             <button
               key={id}
