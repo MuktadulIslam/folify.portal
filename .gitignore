@@ -1,9 +1,28 @@
 # Dependencies
-server/node_modules/
-web-app/node_modules/
+node_modules/
+**/node_modules/
+
+# Deployments
+deployments/
+
+# Environment files
+# .env
+# .env.local
+# .env.*.local
 
 # Build outputs
-web-app/.next/
-web-app/out/
-web-app/dist/
-web-app/build/
+.next/
+dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

@@ -1,11 +1,12 @@
 export const routePaths = {
-    login: '/accounts/login',
-    register: '/efd6ed607a77d2c8173',
-    home: '/',
+  login: '/auth/login',
+  register: '/auth/register',
+  home: '/',
+  builder: '/builder',
+  admin: '/admin',
 } as const;
 
 export const config = {
-    callbackUrlName: 'callbackUrl',
-    accessTokenName: 'access_token',
-    refreshTokenName: 'refresh_token',
+  /** The query-string key that stores the post-login redirect URL */
+  callbackUrlName: 'callbackUrl',
 } as const;
