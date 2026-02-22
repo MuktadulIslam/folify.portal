@@ -4,6 +4,7 @@ export const routePaths = {
   home: '/',
   builder: '/builder',
   admin: '/admin',
+  settings: '/settings',
 } as const;
 
 export const config = {

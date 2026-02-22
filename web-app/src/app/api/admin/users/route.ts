@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import { promises as fs } from "fs";
+import path from "path";
 import { connectDB } from "@/lib/db";
 import User from "@/models/User";
 import Project from "@/models/Project";
+import { killProcess, freePort } from "@/lib/deploy";
+
+const DEPLOY_BASE_DIR =
+  process.env.DEPLOY_BASE_DIR || "e:/Github/folify.portal/deployments";
 
 const SUPER_KEY = process.env.SUPER_KEY || "ilovefolify";
 const ADMIN_COOKIE = "admin_session";
@@ -22,6 +28,91 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ users });
   } catch (error) {
     console.error("Admin list users error:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
+
+export async function PATCH(req: NextRequest) {
+  if (!isAdminAuthed(req)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const { userId, newPassword } = await req.json();
+
+    if (!userId || !newPassword) {
+      return NextResponse.json({ error: "userId and newPassword are required" }, { status: 400 });
+    }
+
+    if (newPassword.length < 6) {
+      return NextResponse.json({ error: "Password must be at least 6 characters" }, { status: 400 });
+    }
+
+    await connectDB();
+
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { $set: { password: hashedPassword } },
+      { new: true }
+    ).select("-password");
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Admin reset password error:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  if (!isAdminAuthed(req)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const { userId, superKey } = await req.json();
+
+    if (!userId) {
+      return NextResponse.json({ error: "userId is required" }, { status: 400 });
+    }
+
+    if (!superKey || superKey !== SUPER_KEY) {
+      return NextResponse.json({ error: "Invalid super key" }, { status: 403 });
+    }
+
+    await connectDB();
+
+    // Find all projects belonging to the user
+    const projects = await Project.find({ userId });
+
+    // Terminate deployments and delete deployment folders
+    for (const project of projects) {
+      if (project.deployedPid) {
+        await killProcess(project.deployedPid);
+      }
+      if (project.deployedPort) {
+        await freePort(project.deployedPort);
+      }
+      const deployDir = path.join(DEPLOY_BASE_DIR, String(project._id));
+      await fs.rm(deployDir, { recursive: true, force: true }).catch(() => {});
+    }
+
+    // Delete all projects from DB
+    await Project.deleteMany({ userId });
+
+    // Delete the user from DB
+    const deleted = await User.findByIdAndDelete(userId);
+    if (!deleted) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Admin delete user error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
