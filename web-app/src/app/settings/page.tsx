@@ -11,8 +11,6 @@ export default function SettingsPage() {
   // Profile state
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
-  const [projectName, setProjectName] = useState("");
-  const [projectId, setProjectId] = useState<string | null>(null);
 
   // Password state
   const [currentPassword, setCurrentPassword] = useState("");
@@ -34,20 +32,12 @@ export default function SettingsPage() {
   useEffect(() => {
     async function loadData() {
       try {
-        const [userRes, projectRes] = await Promise.all([
-          fetch("/api/auth/me"),
-          fetch("/api/projects"),
-        ]);
+        const userRes = await fetch("/api/auth/me");
         const userData = await userRes.json();
-        const projectData = await projectRes.json();
 
         if (userData.user) {
           setFullName(userData.user.fullName);
           setEmail(userData.user.email);
-        }
-        if (projectData.project) {
-          setProjectId(projectData.project._id);
-          setProjectName(projectData.project.name);
         }
       } catch {
         setProfileError("Failed to load your information.");
@@ -78,14 +68,6 @@ export default function SettingsPage() {
         const data = await userRes.json();
         setProfileError(data.error || "Failed to update profile.");
         return;
-      }
-
-      if (projectId && projectName.trim()) {
-        await fetch(`/api/projects/${projectId}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name: projectName.trim() }),
-        });
       }
 
       setProfileSaved(true);
@@ -144,11 +126,11 @@ export default function SettingsPage() {
       {/* Top bar */}
       <div className="bg-white border-b border-green-200 px-6 h-14 flex items-center gap-4">
         <button
-          onClick={() => router.push(routePaths.builder)}
+          onClick={() => router.push(routePaths.home)}
           className="flex items-center gap-1.5 text-sm text-green-600 hover:text-green-800 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          Back to Builder
+          Back to Home
         </button>
         <span className="text-green-200">|</span>
         <h1 className="text-sm font-semibold text-green-900">Account Settings</h1>
@@ -165,7 +147,7 @@ export default function SettingsPage() {
             <div className="bg-white rounded-xl border border-green-100 shadow-sm">
               <div className="px-6 py-4 border-b border-green-100">
                 <h2 className="text-sm font-semibold text-green-900">Profile</h2>
-                <p className="text-xs text-green-500 mt-0.5">Update your name, email, and project name</p>
+                <p className="text-xs text-green-500 mt-0.5">Update your name and email</p>
               </div>
               <div className="px-6 py-5 space-y-4">
                 <div>
@@ -186,16 +168,6 @@ export default function SettingsPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full px-3 py-2 text-sm border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
                     placeholder="your@email.com"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-green-700 mb-1">Project Name</label>
-                  <input
-                    type="text"
-                    value={projectName}
-                    onChange={(e) => setProjectName(e.target.value)}
-                    className="w-full px-3 py-2 text-sm border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
-                    placeholder="My LMS Site"
                   />
                 </div>
                 {profileError && <p className="text-xs text-red-600">{profileError}</p>}

@@ -16,6 +16,7 @@ export interface Project {
   _id: string;
   userId: string;
   name: string;
+  description: string;
   routes: Route[];
   deployedPort: number | null;
   deployedPid: number | null;

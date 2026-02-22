@@ -1,13 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useBuilderStore } from "@/stores/builder-store";
-import { Monitor, Tablet, Smartphone, Eye, Rocket, Loader2, CheckCircle, X, ExternalLink, Settings } from "lucide-react";
-import { routePaths } from "@/config";
+import { Monitor, Tablet, Smartphone, Eye, Rocket, Loader2, CheckCircle, X, ExternalLink } from "lucide-react";
 
 export default function Toolbar() {
-  const router = useRouter();
   const { selectedDevice, setDevice, isDeploying, setIsDeploying, setDeployedPort, projectId } =
     useBuilderStore();
   const [deployedUrl, setDeployedUrl] = useState<string | null>(null);
@@ -91,14 +88,6 @@ export default function Toolbar() {
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => router.push(routePaths.settings)}
-            className="p-2 text-green-500 hover:text-green-700 hover:bg-green-50 rounded-lg transition-colors"
-            aria-label="Open settings"
-            title="Settings"
-          >
-            <Settings className="w-4 h-4" />
-          </button>
           <button
             onClick={handlePreview}
             className="flex items-center gap-1.5 px-4 py-1.5 text-sm text-green-700 border border-green-300 rounded-lg hover:bg-green-50 transition-colors"

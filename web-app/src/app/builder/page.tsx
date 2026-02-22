@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   DndContext,
   DragEndEvent,
@@ -11,6 +12,7 @@ import {
   pointerWithin,
 } from "@dnd-kit/core";
 import { v4 as uuidv4 } from "uuid";
+import { Loader2 } from "lucide-react";
 import { useBuilderStore } from "@/stores/builder-store";
 import { COMPONENT_REGISTRY } from "@/components/lms";
 import LeftSidebar from "@/components/builder/LeftSidebar";
@@ -18,7 +20,11 @@ import Canvas from "@/components/builder/Canvas";
 import Toolbar from "@/components/builder/Toolbar";
 import EditPanel from "@/components/builder/EditPanel";
 
-export default function BuilderPage() {
+function BuilderPageInner() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const projectIdParam = searchParams.get("projectId");
+
   const {
     setProject,
     isEditPanelOpen,
@@ -36,19 +42,31 @@ export default function BuilderPage() {
   );
 
   useEffect(() => {
+    if (!projectIdParam) {
+      router.replace("/");
+      return;
+    }
+
     async function loadProject() {
       try {
-        const res = await fetch("/api/projects");
+        const res = await fetch(`/api/projects/${projectIdParam}`);
+        if (!res.ok) {
+          router.replace("/");
+          return;
+        }
         const data = await res.json();
         if (data.project) {
           setProject(data.project);
+        } else {
+          router.replace("/");
         }
       } catch (err) {
         console.error("Failed to load project:", err);
+        router.replace("/");
       }
     }
     loadProject();
-  }, [setProject]);
+  }, [projectIdParam, setProject, router]);
 
   // Auto-save with 2s debounce
   const autoSave = useCallback(async () => {
@@ -118,5 +136,19 @@ export default function BuilderPage() {
       </div>
       <DragOverlay />
     </DndContext>
+  );
+}
+
+export default function BuilderPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex h-screen items-center justify-center bg-green-50">
+          <Loader2 className="w-6 h-6 animate-spin text-green-500" />
+        </div>
+      }
+    >
+      <BuilderPageInner />
+    </Suspense>
   );
 }

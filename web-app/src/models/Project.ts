@@ -17,6 +17,7 @@ export interface IRoute {
 export interface IProject extends Document {
   userId: mongoose.Types.ObjectId;
   name: string;
+  description: string;
   routes: IRoute[];
   deployedPort: number | null;
   deployedPid: number | null;
@@ -49,6 +50,7 @@ const ProjectSchema = new Schema<IProject>(
   {
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     name: { type: String, default: "My LMS Site" },
+    description: { type: String, default: "" },
     routes: {
       type: [RouteSchema],
       default: [{ path: "/", tag: "unprotected", components: [] }],

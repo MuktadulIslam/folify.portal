@@ -5,6 +5,7 @@ export const routePaths = {
   builder: '/builder',
   admin: '/admin',
   settings: '/settings',
+  projects: '/projects',
 } as const;
 
 export const config = {
