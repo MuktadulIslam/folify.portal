@@ -122,61 +122,61 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-green-50">
+    <div className="min-h-screen bg-slate-50">
       {/* Top bar */}
-      <div className="bg-white border-b border-green-200 px-6 h-14 flex items-center gap-4">
+      <div className="bg-white border-b border-slate-200 px-6 h-14 flex items-center gap-4">
         <button
           onClick={() => router.push(routePaths.home)}
-          className="flex items-center gap-1.5 text-sm text-green-600 hover:text-green-800 transition-colors"
+          className="flex items-center gap-1.5 text-sm text-slate-600 hover:text-slate-900 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Home
         </button>
-        <span className="text-green-200">|</span>
-        <h1 className="text-sm font-semibold text-green-900">Account Settings</h1>
+        <span className="text-slate-300">|</span>
+        <h1 className="text-sm font-semibold text-slate-800">Account Settings</h1>
       </div>
 
       <div className="max-w-xl mx-auto px-4 py-10 space-y-6">
         {fetching ? (
           <div className="flex justify-center py-20">
-            <Loader2 className="w-6 h-6 animate-spin text-green-500" />
+            <Loader2 className="w-5 h-5 animate-spin text-indigo-500" />
           </div>
         ) : (
           <>
             {/* Profile section */}
-            <div className="bg-white rounded-xl border border-green-100 shadow-sm">
-              <div className="px-6 py-4 border-b border-green-100">
-                <h2 className="text-sm font-semibold text-green-900">Profile</h2>
-                <p className="text-xs text-green-500 mt-0.5">Update your name and email</p>
+            <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
+              <div className="px-6 py-4 border-b border-slate-100">
+                <h2 className="text-sm font-semibold text-slate-900">Profile</h2>
+                <p className="text-xs text-slate-400 mt-0.5">Update your name and email</p>
               </div>
               <div className="px-6 py-5 space-y-4">
                 <div>
-                  <label className="block text-xs font-medium text-green-700 mb-1">Full Name</label>
+                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">Full Name</label>
                   <input
                     type="text"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="w-full px-3 py-2 text-sm border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
+                    className="w-full px-3 py-2.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
                     placeholder="Your full name"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-green-700 mb-1">Email</label>
+                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">Email</label>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-3 py-2 text-sm border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
+                    className="w-full px-3 py-2.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
                     placeholder="your@email.com"
                   />
                 </div>
                 {profileError && <p className="text-xs text-red-600">{profileError}</p>}
               </div>
-              <div className="px-6 py-4 border-t border-green-100 flex justify-end">
+              <div className="px-6 py-4 border-t border-slate-100 flex justify-end">
                 <button
                   onClick={handleSaveProfile}
                   disabled={profileLoading}
-                  className="flex items-center gap-1.5 px-4 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-green-300 transition-colors"
+                  className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:bg-indigo-300 transition-colors shadow-sm"
                 >
                   {profileLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -189,64 +189,64 @@ export default function SettingsPage() {
             </div>
 
             {/* Password section */}
-            <div className="bg-white rounded-xl border border-green-100 shadow-sm">
-              <div className="px-6 py-4 border-b border-green-100">
-                <h2 className="text-sm font-semibold text-green-900">Change Password</h2>
-                <p className="text-xs text-green-500 mt-0.5">Set a new password for your account</p>
+            <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
+              <div className="px-6 py-4 border-b border-slate-100">
+                <h2 className="text-sm font-semibold text-slate-900">Change Password</h2>
+                <p className="text-xs text-slate-400 mt-0.5">Set a new password for your account</p>
               </div>
               <div className="px-6 py-5 space-y-4">
                 <div>
-                  <label className="block text-xs font-medium text-green-700 mb-1">Current Password</label>
+                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">Current Password</label>
                   <div className="relative">
                     <input
                       type={showCurrent ? "text" : "password"}
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
-                      className="w-full px-3 py-2 pr-10 text-sm border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
+                      className="w-full px-3 py-2.5 pr-10 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
                       placeholder="Enter current password"
                     />
                     <button
                       type="button"
                       onClick={() => setShowCurrent((v) => !v)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-green-400 hover:text-green-600"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
                     >
                       {showCurrent ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-green-700 mb-1">New Password</label>
+                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">New Password</label>
                   <div className="relative">
                     <input
                       type={showNew ? "text" : "password"}
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
-                      className="w-full px-3 py-2 pr-10 text-sm border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
+                      className="w-full px-3 py-2.5 pr-10 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
                       placeholder="At least 6 characters"
                     />
                     <button
                       type="button"
                       onClick={() => setShowNew((v) => !v)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-green-400 hover:text-green-600"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
                     >
                       {showNew ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-green-700 mb-1">Confirm New Password</label>
+                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">Confirm New Password</label>
                   <div className="relative">
                     <input
                       type={showConfirm ? "text" : "password"}
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
-                      className="w-full px-3 py-2 pr-10 text-sm border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
+                      className="w-full px-3 py-2.5 pr-10 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
                       placeholder="Repeat new password"
                     />
                     <button
                       type="button"
                       onClick={() => setShowConfirm((v) => !v)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-green-400 hover:text-green-600"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
                     >
                       {showConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
@@ -254,11 +254,11 @@ export default function SettingsPage() {
                 </div>
                 {passwordError && <p className="text-xs text-red-600">{passwordError}</p>}
               </div>
-              <div className="px-6 py-4 border-t border-green-100 flex justify-end">
+              <div className="px-6 py-4 border-t border-slate-100 flex justify-end">
                 <button
                   onClick={handleChangePassword}
                   disabled={passwordLoading}
-                  className="flex items-center gap-1.5 px-4 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-green-300 transition-colors"
+                  className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:bg-indigo-300 transition-colors shadow-sm"
                 >
                   {passwordLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />

@@ -15,22 +15,22 @@ export default function CanvasComponentWrapper({ instanceId, children }: CanvasC
 
   return (
     <div
-      className={`relative group ${isHovered ? "ring-2 ring-green-400 ring-offset-2" : ""}`}
+      className={`relative group ${isHovered ? "ring-2 ring-indigo-400 ring-offset-2" : ""}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {isHovered && (
-        <div className="absolute -top-3 right-2 z-20 flex items-center gap-1 bg-white rounded-lg shadow-md border border-green-200 px-1 py-0.5">
+        <div className="absolute -top-3 right-2 z-20 flex items-center gap-1 bg-white rounded-lg shadow-md border border-slate-200 px-1 py-0.5">
           <button
             onClick={() => openEditPanel(instanceId)}
-            className="p-1 hover:bg-green-100 rounded"
+            className="p-1 hover:bg-indigo-50 rounded transition-colors"
             title="Edit component"
           >
-            <Pencil className="w-4 h-4 text-green-600" />
+            <Pencil className="w-4 h-4 text-indigo-600" />
           </button>
           <button
             onClick={() => removeComponentFromCanvas(instanceId)}
-            className="p-1 hover:bg-red-100 rounded"
+            className="p-1 hover:bg-red-50 rounded transition-colors"
           >
             <Trash2 className="w-4 h-4 text-red-500" />
           </button>

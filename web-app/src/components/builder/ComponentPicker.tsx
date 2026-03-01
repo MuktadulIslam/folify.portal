@@ -19,9 +19,9 @@ export default function ComponentPicker() {
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between mb-3"
       >
-        <h3 className="text-sm font-semibold text-green-700">Components</h3>
+        <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest">Components</h3>
         <ChevronDown
-          className={`w-4 h-4 text-green-500 transition-transform ${isOpen ? "rotate-180" : ""}`}
+          className={`w-4 h-4 text-slate-400 transition-transform ${isOpen ? "rotate-180" : ""}`}
         />
       </button>
 
@@ -30,7 +30,7 @@ export default function ComponentPicker() {
           <select
             value={selectedCategory || ""}
             onChange={(e) => setSelectedCategory(e.target.value || null)}
-            className="w-full px-3 py-2 text-sm border border-green-200 rounded-lg bg-white text-green-800 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent mb-4"
+            className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent mb-4 transition-shadow"
           >
             <option value="">Select a component type...</option>
             {COMPONENT_CATEGORIES.map((cat) => (
@@ -54,7 +54,7 @@ export default function ComponentPicker() {
           )}
 
           {selectedCategory && filteredComponents.length === 0 && (
-            <p className="text-xs text-green-400 text-center py-4">
+            <p className="text-xs text-slate-400 text-center py-4">
               No components in this category yet
             </p>
           )}

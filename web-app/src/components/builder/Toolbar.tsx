@@ -17,7 +17,6 @@ export default function Toolbar() {
     setDeployedUrl(null);
 
     try {
-      // Save current state first
       const state = useBuilderStore.getState();
       const routes = state.saveCurrentRouteComponents();
       await fetch(`/api/projects/${projectId}`, {
@@ -52,7 +51,6 @@ export default function Toolbar() {
   async function handlePreview() {
     if (!projectId) return;
 
-    // Save current state first
     const state = useBuilderStore.getState();
     const routes = state.saveCurrentRouteComponents();
     await fetch(`/api/projects/${projectId}`, {
@@ -71,17 +69,17 @@ export default function Toolbar() {
   ];
 
   return (
-    <div className="border-b border-green-200 bg-white shrink-0">
+    <div className="border-b border-slate-200 bg-white shrink-0">
       <div className="h-14 flex items-center justify-between px-4">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1">
           {devices.map(({ id, icon: Icon, label }) => (
             <button
               key={id}
               onClick={() => setDevice(id)}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-colors ${
                 selectedDevice === id
-                  ? "bg-green-100 text-green-700 font-medium"
-                  : "text-green-500 hover:bg-green-50"
+                  ? "bg-indigo-50 text-indigo-700 font-medium"
+                  : "text-slate-500 hover:bg-slate-100 hover:text-slate-700"
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -93,36 +91,36 @@ export default function Toolbar() {
         <div className="flex items-center gap-2">
           <button
             onClick={handlePreview}
-            className="flex items-center gap-1.5 px-4 py-1.5 text-sm text-green-700 border border-green-300 rounded-lg hover:bg-green-50 transition-colors"
+            className="flex items-center gap-1.5 px-4 py-1.5 text-sm font-medium text-slate-700 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
           >
             <Eye className="w-4 h-4" />
-            See Preview
+            Preview
           </button>
           <button
             onClick={handleDeploy}
             disabled={isDeploying}
-            className="flex items-center gap-1.5 px-4 py-1.5 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-green-300 transition-colors"
+            className="flex items-center gap-1.5 px-4 py-1.5 text-sm font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:bg-indigo-300 transition-colors shadow-sm"
           >
             {isDeploying ? (
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
               <Rocket className="w-4 h-4" />
             )}
-            {isDeploying ? "Deploying..." : "Deploy Now"}
+            {isDeploying ? "Deploying..." : "Deploy"}
           </button>
         </div>
       </div>
 
       {deployedUrl && (
-        <div className="flex items-center justify-between px-4 py-2 bg-green-50 border-t border-green-200">
-          <div className="flex items-center gap-2 text-sm text-green-700">
-            <CheckCircle className="w-4 h-4 text-green-600 shrink-0" />
-            <span>Deployed successfully! Your project is running at</span>
+        <div className="flex items-center justify-between px-4 py-2 bg-emerald-50 border-t border-emerald-200">
+          <div className="flex items-center gap-2 text-sm text-emerald-700">
+            <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span>Deployed successfully at</span>
             <a
               href={deployedUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 font-medium underline underline-offset-2 hover:text-green-900"
+              className="flex items-center gap-1 font-medium underline underline-offset-2 hover:text-emerald-900"
             >
               {deployedUrl}
               <ExternalLink className="w-3 h-3" />
@@ -130,7 +128,7 @@ export default function Toolbar() {
           </div>
           <button
             onClick={() => setDeployedUrl(null)}
-            className="text-green-500 hover:text-green-700 transition-colors"
+            className="text-emerald-500 hover:text-emerald-700 transition-colors"
             aria-label="Dismiss"
           >
             <X className="w-4 h-4" />

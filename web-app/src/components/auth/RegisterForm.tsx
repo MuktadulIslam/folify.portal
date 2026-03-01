@@ -47,85 +47,50 @@ export default function RegisterForm() {
     }
   }
 
+  const inputCls = "w-full px-3 py-2.5 border border-slate-200 rounded-lg bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow";
+  const labelCls = "block text-sm font-medium text-slate-700 mb-1.5";
+
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4">
       <div>
-        <label className="block text-sm font-medium text-green-800 mb-1">Full Name</label>
-        <input
-          type="text"
-          value={form.fullName}
-          onChange={handleChange("fullName")}
-          className="w-full px-3 py-2 border border-green-200 rounded-lg bg-white text-green-900 placeholder-green-400 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
-          placeholder="John Doe"
-          required
-        />
+        <label className={labelCls}>Full Name</label>
+        <input type="text" value={form.fullName} onChange={handleChange("fullName")} className={inputCls} placeholder="John Doe" required />
       </div>
       <div>
-        <label className="block text-sm font-medium text-green-800 mb-1">Email</label>
-        <input
-          type="email"
-          value={form.email}
-          onChange={handleChange("email")}
-          className="w-full px-3 py-2 border border-green-200 rounded-lg bg-white text-green-900 placeholder-green-400 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
-          placeholder="john@example.com"
-          required
-        />
+        <label className={labelCls}>Email</label>
+        <input type="email" value={form.email} onChange={handleChange("email")} className={inputCls} placeholder="john@example.com" required />
       </div>
       <div>
-        <label className="block text-sm font-medium text-green-800 mb-1">Address</label>
-        <textarea
-          value={form.address}
-          onChange={handleChange("address")}
-          className="w-full px-3 py-2 border border-green-200 rounded-lg bg-white text-green-900 placeholder-green-400 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent resize-none"
-          placeholder="123 Main St, City, Country"
-          rows={2}
-          required
-        />
+        <label className={labelCls}>Address</label>
+        <textarea value={form.address} onChange={handleChange("address")} className={inputCls + " resize-none"} placeholder="123 Main St, City, Country" rows={2} required />
       </div>
       <div>
-        <label className="block text-sm font-medium text-green-800 mb-1">Username</label>
-        <input
-          type="text"
-          value={form.username}
-          onChange={handleChange("username")}
-          className="w-full px-3 py-2 border border-green-200 rounded-lg bg-white text-green-900 placeholder-green-400 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
-          placeholder="Choose a username (min 3 chars)"
-          required
-        />
+        <label className={labelCls}>Username</label>
+        <input type="text" value={form.username} onChange={handleChange("username")} className={inputCls} placeholder="Choose a username (min 3 chars)" required />
       </div>
       <div>
-        <label className="block text-sm font-medium text-green-800 mb-1">Password</label>
-        <input
-          type="password"
-          value={form.password}
-          onChange={handleChange("password")}
-          className="w-full px-3 py-2 border border-green-200 rounded-lg bg-white text-green-900 placeholder-green-400 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
-          placeholder="Choose a password (min 6 chars)"
-          required
-        />
+        <label className={labelCls}>Password</label>
+        <input type="password" value={form.password} onChange={handleChange("password")} className={inputCls} placeholder="Choose a password (min 6 chars)" required />
       </div>
       <div>
-        <label className="block text-sm font-medium text-green-800 mb-1">Super Key</label>
-        <input
-          type="password"
-          value={form.superKey}
-          onChange={handleChange("superKey")}
-          className="w-full px-3 py-2 border border-green-200 rounded-lg bg-white text-green-900 placeholder-green-400 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
-          placeholder="Enter the super key"
-          required
-        />
+        <label className={labelCls}>Super Key</label>
+        <input type="password" value={form.superKey} onChange={handleChange("superKey")} className={inputCls} placeholder="Enter the super key" required />
       </div>
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      {error && (
+        <div className="px-3 py-2.5 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-red-600 text-sm">{error}</p>
+        </div>
+      )}
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-2 px-4 bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white font-medium rounded-lg transition-colors"
+        className="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white font-medium rounded-lg transition-colors shadow-sm"
       >
         {loading ? "Creating account..." : "Create Account"}
       </button>
-      <p className="text-center text-sm text-green-700">
+      <p className="text-center text-sm text-slate-500">
         Already have an account?{" "}
-        <a href="/auth/login" className="text-green-600 font-medium hover:underline">
+        <a href="/auth/login" className="text-indigo-600 font-medium hover:text-indigo-800 hover:underline">
           Sign in
         </a>
       </p>

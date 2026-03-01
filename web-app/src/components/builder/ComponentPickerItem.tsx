@@ -27,28 +27,28 @@ export default function ComponentPickerItem({ id, name, thumbnail }: ComponentPi
       style={style}
       {...listeners}
       {...attributes}
-      className={`border border-green-200 rounded-lg p-3 cursor-grab active:cursor-grabbing hover:border-green-400 hover:shadow-sm transition-all bg-white ${
+      className={`border border-slate-200 rounded-lg p-3 cursor-grab active:cursor-grabbing hover:border-indigo-400 hover:shadow-sm transition-all bg-white ${
         isDragging ? "opacity-50 shadow-lg" : ""
       }`}
     >
       {thumbnail ? (
-        <div className="w-full h-20 rounded bg-green-50 mb-2 overflow-hidden">
+        <div className="w-full h-20 rounded-lg bg-slate-50 mb-2 overflow-hidden">
           <img
             src={thumbnail}
             alt={name}
             className="w-full h-full object-cover"
             onError={(e) => {
               (e.target as HTMLImageElement).style.display = "none";
-              (e.target as HTMLImageElement).parentElement!.innerHTML = `<div class="w-full h-full flex items-center justify-center text-green-400 text-xs">${name}</div>`;
+              (e.target as HTMLImageElement).parentElement!.innerHTML = `<div class="w-full h-full flex items-center justify-center text-slate-400 text-xs">${name}</div>`;
             }}
           />
         </div>
       ) : (
-        <div className="w-full h-20 rounded bg-green-50 mb-2 flex items-center justify-center">
-          <span className="text-green-500 text-xs text-center px-1">{name}</span>
+        <div className="w-full h-20 rounded-lg bg-slate-50 mb-2 flex items-center justify-center">
+          <span className="text-slate-400 text-xs text-center px-1">{name}</span>
         </div>
       )}
-      <p className="text-xs font-medium text-green-700 text-center truncate">{name}</p>
+      <p className="text-xs font-medium text-slate-600 text-center truncate">{name}</p>
     </div>
   );
 }

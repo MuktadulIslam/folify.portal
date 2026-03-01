@@ -71,56 +71,55 @@ export default function RouteManager() {
   }
 
   return (
-    <div className="border-b border-green-100">
+    <div className="border-b border-slate-100">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-4 py-3 flex items-center justify-between hover:bg-green-50 transition-colors"
+        className="w-full px-4 py-3 flex items-center justify-between hover:bg-slate-50 transition-colors"
       >
-        <h3 className="text-sm font-semibold text-green-700">Routes</h3>
+        <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest">Pages</h3>
         <ChevronDown
-          className={`w-4 h-4 text-green-500 transition-transform ${isOpen ? "rotate-180" : ""}`}
+          className={`w-4 h-4 text-slate-400 transition-transform ${isOpen ? "rotate-180" : ""}`}
         />
       </button>
 
       {isOpen && (
         <div className="px-4 pb-3 space-y-1">
-          {/* Add New Route Button */}
           {!showAddForm ? (
             <button
               onClick={() => setShowAddForm(true)}
-              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-green-600 hover:bg-green-50 rounded-lg transition-colors border border-dashed border-green-300"
+              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-500 hover:text-slate-800 hover:bg-slate-50 rounded-lg transition-colors border border-dashed border-slate-200"
             >
               <Plus className="w-4 h-4" />
-              Add new route
+              Add route
             </button>
           ) : (
-            <div className="p-3 bg-green-50 rounded-lg space-y-2">
+            <div className="p-3 bg-slate-50 rounded-lg space-y-2 border border-slate-200">
               <input
                 type="text"
                 value={newPath}
                 onChange={(e) => setNewPath(e.target.value)}
                 placeholder="/path/to/page"
-                className="w-full px-2 py-1.5 text-sm border border-green-200 rounded bg-white text-green-900 focus:outline-none focus:ring-1 focus:ring-green-400"
+                className="w-full px-2 py-1.5 text-sm border border-slate-200 rounded-lg bg-white text-slate-900 focus:outline-none focus:ring-1 focus:ring-indigo-400"
                 autoFocus
               />
               <div className="flex items-center gap-2">
                 <select
                   value={newTag}
                   onChange={(e) => setNewTag(e.target.value as "protected" | "unprotected")}
-                  className="flex-1 px-2 py-1.5 text-sm border border-green-200 rounded bg-white text-green-900 focus:outline-none focus:ring-1 focus:ring-green-400"
+                  className="flex-1 px-2 py-1.5 text-sm border border-slate-200 rounded-lg bg-white text-slate-900 focus:outline-none focus:ring-1 focus:ring-indigo-400"
                 >
                   <option value="unprotected">Unprotected</option>
                   <option value="protected">Protected</option>
                 </select>
                 <button
                   onClick={handleAddRoute}
-                  className="p-1.5 bg-green-600 text-white rounded hover:bg-green-700"
+                  className="p-1.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
                 >
                   <Check className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => setShowAddForm(false)}
-                  className="p-1.5 bg-gray-200 text-gray-600 rounded hover:bg-gray-300"
+                  className="p-1.5 bg-slate-200 text-slate-600 rounded-lg hover:bg-slate-300 transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -128,36 +127,35 @@ export default function RouteManager() {
             </div>
           )}
 
-          {/* Route List */}
           {routes.map((route) => (
             <div key={route.path}>
               {editingPath === route.path ? (
-                <div className="p-3 bg-green-50 rounded-lg space-y-2">
+                <div className="p-3 bg-slate-50 rounded-lg space-y-2 border border-slate-200">
                   <input
                     type="text"
                     value={editPath}
                     onChange={(e) => setEditPath(e.target.value)}
-                    className="w-full px-2 py-1.5 text-sm border border-green-200 rounded bg-white text-green-900 focus:outline-none focus:ring-1 focus:ring-green-400"
+                    className="w-full px-2 py-1.5 text-sm border border-slate-200 rounded-lg bg-white text-slate-900 focus:outline-none focus:ring-1 focus:ring-indigo-400"
                     autoFocus
                   />
                   <div className="flex items-center gap-2">
                     <select
                       value={editTag}
                       onChange={(e) => setEditTag(e.target.value as "protected" | "unprotected")}
-                      className="flex-1 px-2 py-1.5 text-sm border border-green-200 rounded bg-white text-green-900 focus:outline-none focus:ring-1 focus:ring-green-400"
+                      className="flex-1 px-2 py-1.5 text-sm border border-slate-200 rounded-lg bg-white text-slate-900 focus:outline-none focus:ring-1 focus:ring-indigo-400"
                     >
                       <option value="unprotected">Unprotected</option>
                       <option value="protected">Protected</option>
                     </select>
                     <button
                       onClick={() => handleUpdateRoute(route.path)}
-                      className="p-1.5 bg-green-600 text-white rounded hover:bg-green-700"
+                      className="p-1.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
                     >
                       <Check className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => setEditingPath(null)}
-                      className="p-1.5 bg-gray-200 text-gray-600 rounded hover:bg-gray-300"
+                      className="p-1.5 bg-slate-200 text-slate-600 rounded-lg hover:bg-slate-300 transition-colors"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -167,30 +165,21 @@ export default function RouteManager() {
                 <div
                   className={`flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer transition-colors ${
                     activeRoutePath === route.path
-                      ? "bg-green-100 border border-green-300"
-                      : "hover:bg-green-50"
+                      ? "bg-indigo-50 border border-indigo-200"
+                      : "hover:bg-slate-50"
                   }`}
                   onClick={() => setActiveRoute(route.path)}
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-green-800 truncate">
+                      <span className={`text-sm font-medium truncate ${activeRoutePath === route.path ? "text-indigo-800" : "text-slate-700"}`}>
                         {route.path}
                       </span>
                       {route.tag === "protected" ? (
                         <Shield className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                       ) : (
-                        <ShieldOff className="w-3.5 h-3.5 text-green-400 shrink-0" />
+                        <ShieldOff className="w-3.5 h-3.5 text-slate-300 shrink-0" />
                       )}
-                      <span
-                        className={`text-xs px-1.5 py-0.5 rounded-full shrink-0 ${
-                          route.tag === "protected"
-                            ? "bg-amber-100 text-amber-700"
-                            : "bg-green-100 text-green-600"
-                        }`}
-                      >
-                        {route.tag}
-                      </span>
                     </div>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
@@ -199,18 +188,18 @@ export default function RouteManager() {
                         e.stopPropagation();
                         startEdit(route.path, route.tag);
                       }}
-                      className="p-1 hover:bg-green-200 rounded transition-colors"
+                      className="p-1 hover:bg-slate-200 rounded-md transition-colors"
                     >
-                      <Pencil className="w-3.5 h-3.5 text-green-600" />
+                      <Pencil className="w-3.5 h-3.5 text-slate-500" />
                     </button>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         setDeleteTarget(route.path);
                       }}
-                      className="p-1 hover:bg-red-100 rounded transition-colors"
+                      className="p-1 hover:bg-red-100 rounded-md transition-colors"
                     >
-                      <Trash2 className="w-3.5 h-3.5 text-red-500" />
+                      <Trash2 className="w-3.5 h-3.5 text-red-400" />
                     </button>
                   </div>
                 </div>

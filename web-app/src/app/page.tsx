@@ -93,13 +93,20 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-green-50">
+    <div className="min-h-screen bg-slate-50">
       {/* Top bar */}
-      <div className="bg-white border-b border-green-200 px-6 h-14 flex items-center justify-between">
-        <h1 className="text-sm font-semibold text-green-900">My Projects</h1>
+      <div className="bg-white border-b border-slate-200 px-6 h-14 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 bg-indigo-600 rounded-md flex items-center justify-center">
+            <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <h1 className="text-sm font-semibold text-slate-800 tracking-tight">Folify</h1>
+        </div>
         <button
           onClick={() => router.push(routePaths.settings)}
-          className="p-2 text-green-500 hover:text-green-700 hover:bg-green-50 rounded-lg transition-colors"
+          className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
           title="Account Settings"
         >
           <Settings className="w-4 h-4" />
@@ -109,15 +116,19 @@ export default function HomePage() {
       <div className="max-w-5xl mx-auto px-6 py-10">
         {loading ? (
           <div className="flex justify-center py-20">
-            <Loader2 className="w-6 h-6 animate-spin text-green-500" />
+            <Loader2 className="w-5 h-5 animate-spin text-indigo-500" />
           </div>
         ) : (
           <>
-            {/* New Project button */}
-            <div className="flex justify-end mb-6">
+            {/* Header row */}
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="text-xl font-bold text-slate-900 tracking-tight">My Projects</h2>
+                <p className="text-sm text-slate-500 mt-0.5">{projects.length} project{projects.length !== 1 ? "s" : ""}</p>
+              </div>
               <button
                 onClick={openModal}
-                className="flex items-center gap-2 px-4 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-sm"
               >
                 <Plus className="w-4 h-4" />
                 New Project
@@ -126,16 +137,24 @@ export default function HomePage() {
 
             {/* Project grid */}
             {projects.length === 0 ? (
-              <div className="text-center py-20">
-                <FolderOpen className="w-10 h-10 mx-auto text-green-300 mb-3" />
-                <p className="text-sm text-green-600">No projects yet. Create your first one!</p>
+              <div className="text-center py-24 border-2 border-dashed border-slate-200 rounded-2xl bg-white">
+                <FolderOpen className="w-10 h-10 mx-auto text-slate-300 mb-3" />
+                <p className="text-sm font-medium text-slate-600">No projects yet</p>
+                <p className="text-xs text-slate-400 mt-1">Create your first project to get started</p>
+                <button
+                  onClick={openModal}
+                  className="mt-5 inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  Create Project
+                </button>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {projects.map((project) => (
                   <div
                     key={project._id}
-                    className="bg-white rounded-xl border border-green-100 shadow-sm hover:shadow-md transition-shadow flex flex-col"
+                    className="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-slate-300 transition-all flex flex-col group"
                   >
                     {/* Card body — click to open in builder */}
                     <button
@@ -144,14 +163,23 @@ export default function HomePage() {
                       }
                       className="w-full text-left px-5 py-4 flex-1"
                     >
-                      <p className="text-sm font-semibold text-green-900 truncate">
-                        {project.name}
-                      </p>
-                      {project.description && (
-                        <p className="text-xs text-green-500 mt-1 line-clamp-2">
-                          {project.description}
-                        </p>
-                      )}
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-indigo-100 transition-colors">
+                          <svg className="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold text-slate-800 truncate">
+                            {project.name}
+                          </p>
+                          {project.description && (
+                            <p className="text-xs text-slate-400 mt-1 line-clamp-2 leading-relaxed">
+                              {project.description}
+                            </p>
+                          )}
+                        </div>
+                      </div>
                     </button>
 
                     {/* Deployed URL */}
@@ -162,8 +190,9 @@ export default function HomePage() {
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
-                          className="inline-flex items-center gap-1 text-xs text-green-600 hover:text-green-800 underline underline-offset-2"
+                          className="inline-flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-800 font-medium"
                         >
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block"></span>
                           {typeof window !== "undefined" ? window.location.hostname : "localhost"}:{project.deployedPort}
                           <ExternalLink className="w-3 h-3" />
                         </a>
@@ -171,12 +200,12 @@ export default function HomePage() {
                     )}
 
                     {/* Card footer actions */}
-                    <div className="border-t border-green-100 px-4 py-2 flex items-center justify-end gap-1">
+                    <div className="border-t border-slate-100 px-4 py-2 flex items-center justify-end gap-1">
                       <button
                         onClick={() =>
                           router.push(`${routePaths.projects}/${project._id}/settings`)
                         }
-                        className="p-1.5 text-green-400 hover:text-green-700 hover:bg-green-50 rounded-lg transition-colors"
+                        className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
                         title="Project Settings"
                       >
                         <Settings2 className="w-4 h-4" />
@@ -184,7 +213,7 @@ export default function HomePage() {
                       <button
                         onClick={() => openDeleteModal(project)}
                         disabled={deletingId === project._id}
-                        className="p-1.5 text-green-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                         title="Delete project"
                       >
                         {deletingId === project._id ? (
@@ -204,11 +233,11 @@ export default function HomePage() {
 
       {/* New Project Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-md mx-4 p-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-6 border border-slate-200">
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-sm font-semibold text-green-900">New Project</h2>
-              <button onClick={closeModal} className="p-1 text-green-400 hover:text-green-700 rounded-lg transition-colors">
+              <h2 className="text-base font-bold text-slate-900">New Project</h2>
+              <button onClick={closeModal} className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -217,28 +246,30 @@ export default function HomePage() {
               onSubmit={(e) => { e.preventDefault(); handleNewProject(); }}
               className="flex flex-col gap-4"
             >
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-medium text-green-800">Project Name <span className="text-red-500">*</span></label>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold text-slate-700">Project Name <span className="text-red-500">*</span></label>
                 <input
                   ref={nameInputRef}
                   type="text"
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
-                  placeholder="My Project"
+                  placeholder="My Awesome LMS"
                   disabled={creating}
-                  className="px-3 py-2 text-sm border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 disabled:bg-green-50"
+                  className="px-3 py-2.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:bg-slate-50 text-slate-900 placeholder-slate-400 transition-shadow"
                 />
               </div>
 
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-medium text-green-800">Description <span className="text-green-400">(optional)</span></label>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold text-slate-700">
+                  Description <span className="text-slate-400 font-normal">(optional)</span>
+                </label>
                 <textarea
                   value={newDescription}
                   onChange={(e) => setNewDescription(e.target.value)}
                   placeholder="What is this project about?"
                   rows={3}
                   disabled={creating}
-                  className="px-3 py-2 text-sm border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 resize-none disabled:bg-green-50"
+                  className="px-3 py-2.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none disabled:bg-slate-50 text-slate-900 placeholder-slate-400 transition-shadow"
                 />
               </div>
 
@@ -247,14 +278,14 @@ export default function HomePage() {
                   type="button"
                   onClick={closeModal}
                   disabled={creating}
-                  className="px-4 py-2 text-sm text-green-700 border border-green-200 rounded-lg hover:bg-green-50 disabled:opacity-50 transition-colors"
+                  className="px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-50 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={creating || !newName.trim()}
-                  className="flex items-center gap-2 px-4 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-green-300 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:bg-indigo-300 transition-colors shadow-sm"
                 >
                   {creating && <Loader2 className="w-4 h-4 animate-spin" />}
                   {creating ? "Creating..." : "Create & Build"}
@@ -267,18 +298,23 @@ export default function HomePage() {
 
       {/* Delete Confirmation Modal */}
       {deleteTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-md mx-4 p-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-6 border border-slate-200">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-semibold text-red-700">Delete Project</h2>
-              <button onClick={closeDeleteModal} className="p-1 text-green-400 hover:text-green-700 rounded-lg transition-colors">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-red-100 flex items-center justify-center">
+                  <Trash2 className="w-4 h-4 text-red-600" />
+                </div>
+                <h2 className="text-base font-bold text-slate-900">Delete Project</h2>
+              </div>
+              <button onClick={closeDeleteModal} className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <p className="text-sm text-green-700 mb-1">
-              This action <span className="font-semibold">cannot be undone</span>. Type{" "}
-              <span className="font-mono font-semibold text-red-600">Delete {deleteTarget.name}</span>{" "}
+            <p className="text-sm text-slate-600 mb-1">
+              This action <span className="font-semibold text-slate-800">cannot be undone</span>. Type{" "}
+              <code className="font-mono font-semibold text-red-600 bg-red-50 px-1.5 py-0.5 rounded text-xs">Delete {deleteTarget.name}</code>{" "}
               to confirm.
             </p>
 
@@ -293,7 +329,7 @@ export default function HomePage() {
                 onChange={(e) => setDeleteConfirmText(e.target.value)}
                 placeholder={`Delete ${deleteTarget.name}`}
                 disabled={!!deletingId}
-                className="px-3 py-2 text-sm border border-red-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 disabled:bg-red-50"
+                className="px-3 py-2.5 text-sm border border-red-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 disabled:bg-red-50 text-slate-900 placeholder-slate-400"
               />
 
               <div className="flex justify-end gap-2">
@@ -301,14 +337,14 @@ export default function HomePage() {
                   type="button"
                   onClick={closeDeleteModal}
                   disabled={!!deletingId}
-                  className="px-4 py-2 text-sm text-green-700 border border-green-200 rounded-lg hover:bg-green-50 disabled:opacity-50 transition-colors"
+                  className="px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-50 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={!!deletingId || deleteConfirmText !== `Delete ${deleteTarget.name}`}
-                  className="flex items-center gap-2 px-4 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:bg-red-300 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:bg-red-200 disabled:text-red-400 transition-colors"
                 >
                   {deletingId && <Loader2 className="w-4 h-4 animate-spin" />}
                   {deletingId ? "Deleting..." : "Delete Project"}

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(\"e:/Github/folify.portal/web-app/src/app/auth/login/page.tsx\":*)",
+      "Bash(\"e:/Github/folify.portal/web-app/src/components/auth/LoginForm.tsx\":*)"
+    ]
+  }
+}

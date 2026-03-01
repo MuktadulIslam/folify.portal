@@ -30,7 +30,6 @@ export default function LoginForm() {
         return;
       }
 
-      // Redirect to the original destination if provided, otherwise go to builder
       const callbackUrl = searchParams.get(appConfig.callbackUrlName) || routePaths.builder;
       router.push(callbackUrl);
     } catch {
@@ -43,38 +42,42 @@ export default function LoginForm() {
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4">
       <div>
-        <label className="block text-sm font-medium text-green-800 mb-1">Username</label>
+        <label className="block text-sm font-medium text-slate-700 mb-1.5">Username</label>
         <input
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="w-full px-3 py-2 border border-green-200 rounded-lg bg-white text-green-900 placeholder-green-400 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
+          className="w-full px-3 py-2.5 border border-slate-200 rounded-lg bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
           placeholder="Enter your username"
           required
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-green-800 mb-1">Password</label>
+        <label className="block text-sm font-medium text-slate-700 mb-1.5">Password</label>
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full px-3 py-2 border border-green-200 rounded-lg bg-white text-green-900 placeholder-green-400 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
+          className="w-full px-3 py-2.5 border border-slate-200 rounded-lg bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
           placeholder="Enter your password"
           required
         />
       </div>
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      {error && (
+        <div className="px-3 py-2.5 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-red-600 text-sm">{error}</p>
+        </div>
+      )}
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-2 px-4 bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white font-medium rounded-lg transition-colors"
+        className="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white font-medium rounded-lg transition-colors shadow-sm"
       >
         {loading ? "Signing in..." : "Sign In"}
       </button>
-      <p className="text-center text-sm text-green-700">
+      <p className="text-center text-sm text-slate-500">
         Don&apos;t have an account?{" "}
-        <a href="/auth/register" className="text-green-600 font-medium hover:underline">
+        <a href="/auth/register" className="text-indigo-600 font-medium hover:text-indigo-800 hover:underline">
           Create one
         </a>
       </p>
